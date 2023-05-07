@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Danh sách sản phẩm</title>
+  <link rel="stylesheet" href="/css/product_card.css">
+  <link rel="stylesheet" href="/css/internal_server.css">
+  <link rel="stylesheet" href="/css/product_list.css">
+</head>
+<body>
+<div th:if="${request_status.value() == 500}">
+  <div th:replace="error_pages/internal_server_error :: body500"></div>
+</div>
+<div class="grid-container">
+  <div th:unless="${request_status.value() == 500}" class="product-card grid-item" th:each="p : ${product_list}">
+    <img src="https://via.placeholder.com/150" alt="Product Image">
+    <h3 th:text="${p.name}"></h3>
+    <p th:if="${p.description.length()>100}" th:text="${#strings.substring(p.description, 0, 100)} + '...'"></p>
+    <p th:unless="${p.description.length()>100}" th:text="${p.description}"></p>
+    <div class="price" th:text="'$' + ${p.price}"></div>
+    <a th:href="@{/adm/product/update/{id} (id=${p.id})}">Cập nhật</a>
+    <br>
+    <a th:href="@{/adm/product/delete/{id} (id=${p.id})}">Xóa</a>
+  </div>
+  <form action="/adm/product/add" method="get">
+    <button class="floating-button">Thêm mới</button>
+  </form>
+  
+</div>
+
+
+</body>
+</html>
